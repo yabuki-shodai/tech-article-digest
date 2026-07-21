@@ -2,7 +2,7 @@ name: Summarize article
 
 on:
   issues:
-    types: [labeled]
+    types: [opened, labeled]
 
 permissions:
   contents: read
@@ -14,7 +14,9 @@ concurrency:
 
 jobs:
   summarize:
-    if: github.event.label.name == 'summarize'
+    if: >-
+      (github.event.action == 'opened' && github.event.issue.title == '[要約待ち]') ||
+      (github.event.action == 'labeled' && github.event.label.name == 'summarize')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

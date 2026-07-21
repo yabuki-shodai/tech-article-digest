@@ -1,0 +1,12 @@
+name: 記事を要約する
+description: QiitaまたはZennの記事をGeminiで要約します
+title: "[要約待ち]"
+body:
+  - type: input
+    id: article_url
+    attributes:
+      label: 記事URL
+      description: QiitaまたはZennの記事URLを貼り付けてください。
+      placeholder: https://zenn.dev/example/articles/example
+    validations:
+      required: true

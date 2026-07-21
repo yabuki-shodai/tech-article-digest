@@ -19,7 +19,10 @@ class IssueService:
         self.summarizer = summarizer
         self.fetchers = fetchers
 
-    def process(self, issue_body: str) -> None:
+    def process(self, issue_body: str) -> bool:
+        if not self.github.claim_issue(self.issue_number):
+            return False
+
         url = extract_first_url(issue_body)
         parsed = validate_article_url(url)
         fetcher = self.fetchers.get(parsed.hostname or "")
@@ -27,10 +30,12 @@ class IssueService:
             raise ValueError(f"Unsupported article host: {parsed.hostname}")
 
         article = fetcher.fetch(url)
+        self.github.update_issue_title(self.issue_number, article.title)
         summary = self.summarizer.summarize(article)
         self.github.add_comment(self.issue_number, summary)
         self.github.replace_processing_label(self.issue_number, "completed")
         self.github.close_issue(self.issue_number)
+        return True
 
     def mark_failed(self) -> None:
         self.github.replace_processing_label(self.issue_number, "failed")
