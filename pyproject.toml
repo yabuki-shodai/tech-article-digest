@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tech-article-digest"
+version = "0.1.0"
+description = "Summarize Qiita and Zenn articles from GitHub Issues with Gemini"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = [
+  "beautifulsoup4>=4.12,<5",
+  "requests>=2.32,<3",
+]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
