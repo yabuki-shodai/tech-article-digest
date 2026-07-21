@@ -1,6 +1,6 @@
 # tech-article-digest
 
-GitHub Issue に Qiita または Zenn の記事 URL を貼り、`summarize` ラベルを付けると、Gemini が日本語で要約して Issue に投稿します。成功時は `completed` ラベルを付けて Issue を閉じ、失敗時は `failed` ラベルを付けて Issue を開いたままにします。
+GitHub Issue に Qiita または Zenn の記事 URL を登録すると、Gemini が背景、詳細解説、実践方法、注意点、用語集を含む日本語の詳細ダイジェストを Issue に投稿します。成功時は `completed` ラベルを付けて Issue を閉じ、失敗時は `failed` ラベルを付けて Issue を開いたままにします。
 
 ## セットアップ
 
