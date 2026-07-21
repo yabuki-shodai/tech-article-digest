@@ -6,6 +6,7 @@ import requests
 class GitHubClient:
     API_BASE = "https://api.github.com"
     LABEL_COLORS = {
+        "summarize": "1d76db",
         "completed": "0e8a16",
         "failed": "d73a4a",
     }
@@ -32,22 +33,49 @@ class GitHubClient:
             json={"body": body},
         )
 
+    def claim_issue(self, issue_number: int) -> bool:
+        issue = self._request(
+            "GET", f"/repos/{self.repository}/issues/{issue_number}"
+        ).json()
+        labels = self._label_names(issue)
+        title = issue.get("title", "")
+        if issue.get("state") != "open" or "completed" in labels:
+            return False
+        if "summarize" not in labels and title != "[要約待ち]":
+            return False
+
+        self._ensure_label("summarize")
+        labels -= {"completed", "failed"}
+        labels.add("summarize")
+        self._request(
+            "PATCH",
+            f"/repos/{self.repository}/issues/{issue_number}",
+            json={"title": "[要約処理中]", "labels": sorted(labels)},
+        )
+        return True
+
+    def update_issue_title(self, issue_number: int, title: str) -> None:
+        normalized = " ".join(title.split())[:240]
+        if not normalized:
+            raise ValueError("Article title is empty")
+        self._request(
+            "PATCH",
+            f"/repos/{self.repository}/issues/{issue_number}",
+            json={"title": normalized},
+        )
+
     def replace_processing_label(self, issue_number: int, target: str) -> None:
         self._ensure_label(target)
         issue = self._request(
             "GET", f"/repos/{self.repository}/issues/{issue_number}"
         ).json()
-        labels = [
-            label["name"]
-            for label in issue.get("labels", [])
-            if isinstance(label, dict)
-            and label.get("name") not in {"summarize", "completed", "failed"}
-        ]
-        labels.append(target)
+        labels = self._label_names(issue)
+        labels -= {"summarize", "completed", "failed"}
+        labels.add(target)
         self._request(
             "PATCH",
             f"/repos/{self.repository}/issues/{issue_number}",
-            json={"labels": labels},
+            json={"labels": sorted(labels)},
         )
 
     def close_issue(self, issue_number: int) -> None:
@@ -74,6 +102,19 @@ class GitHubClient:
             )
             return
         self._raise_for_status(response)
+
+    @staticmethod
+    def _label_names(issue: object) -> set[str]:
+        if not isinstance(issue, dict):
+            raise RuntimeError("GitHub API returned an invalid issue")
+        labels = issue.get("labels", [])
+        if not isinstance(labels, list):
+            raise RuntimeError("GitHub API returned invalid issue labels")
+        return {
+            label["name"]
+            for label in labels
+            if isinstance(label, dict) and isinstance(label.get("name"), str)
+        }
 
     def _request(self, method: str, path: str, **kwargs: object) -> requests.Response:
         response = self.session.request(

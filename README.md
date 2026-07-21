@@ -6,10 +6,12 @@ GitHub Issue に Qiita または Zenn の記事 URL を貼り、`summarize` ラ�
 
 1. Repository Settings の Actions secrets に `GEMINI_API_KEY` を登録する。
 2. 必要なら Actions variables に `GEMINI_MODEL` を登録する。未設定時は `gemini-2.5-flash` を使う。
-3. リポジトリに `summarize` ラベルを作成する。
-4. Qiita または Zenn の記事 URL を本文に含む Issue を作り、`summarize` ラベルを付ける。
+3. `Issues` → `New issue` → `記事を要約する`を選ぶ。
+4. QiitaまたはZennの記事URLだけを入力してIssueを作成する。
 
-`completed` と `failed` ラベルは、初回利用時にワークフローが存在しなければ作成します。
+Issue作成時の仮タイトルは自動入力されます。記事取得後、Issueタイトルを実際の記事タイトルへ自動変更します。`summarize`、`completed`、`failed`ラベルも必要に応じて自動作成します。
+
+失敗したIssueを再実行する場合は、原因を修正してから`summarize`ラベルを付けます。
 
 ## 対応 URL
 

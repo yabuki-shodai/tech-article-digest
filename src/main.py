@@ -34,8 +34,11 @@ def main() -> None:
     )
 
     try:
-        service.process(settings.issue_body)
-        logger.info("Issue #%s was summarized successfully", settings.issue_number)
+        processed = service.process(settings.issue_body)
+        if processed:
+            logger.info("Issue #%s was summarized successfully", settings.issue_number)
+        else:
+            logger.info("Issue #%s is no longer pending; skipping", settings.issue_number)
     except Exception:
         logger.exception("Failed to summarize issue #%s", settings.issue_number)
         try:
