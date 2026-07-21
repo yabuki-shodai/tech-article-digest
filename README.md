@@ -5,7 +5,7 @@ GitHub Issue に Qiita または Zenn の記事 URL を貼り、`summarize` ラ�
 ## セットアップ
 
 1. Repository Settings の Actions secrets に `GEMINI_API_KEY` を登録する。
-2. 必要なら Actions variables に `GEMINI_MODEL` を登録する。未設定時は `gemini-2.5-flash` を使う。
+2. 必要なら Actions variables に `GEMINI_MODEL` を登録する。未設定時は `gemini-3.5-flash` を使う。
 3. `Issues` → `New issue` → `記事を要約する`を選ぶ。
 4. QiitaまたはZennの記事URLだけを入力してIssueを作成する。
 
@@ -28,7 +28,7 @@ GitHub の `issues.labeled` イベント JSON を用意し、次の環境変数�
 export GITHUB_TOKEN=...
 export GITHUB_EVENT_PATH=/path/to/event.json
 export GEMINI_API_KEY=...
-export GEMINI_MODEL=gemini-2.5-flash  # 任意
+export GEMINI_MODEL=gemini-3.5-flash  # 任意
 
 python -m pip install .
 python -m src.main
