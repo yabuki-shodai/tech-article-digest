@@ -33,8 +33,8 @@ class GeminiClient:
                     }
                 ],
                 "generationConfig": {
-                    "temperature": 0.2,
-                    "maxOutputTokens": 2048,
+                    "temperature": 0.1,
+                    "maxOutputTokens": 6000,
                 },
             },
             timeout=self.timeout,
