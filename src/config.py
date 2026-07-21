@@ -14,7 +14,7 @@ class Settings:
     issue_number: int
     issue_body: str
     gemini_api_key: str
-    gemini_model: str = "gemini-2.5-flash"
+    gemini_model: str = "gemini-3.5-flash"
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -40,8 +40,8 @@ class Settings:
             issue_number=issue_number,
             issue_body=issue_body,
             gemini_api_key=os.environ.get("GEMINI_API_KEY", "").strip(),
-            gemini_model=os.environ.get("GEMINI_MODEL", "gemini-2.5-flash").strip()
-            or "gemini-2.5-flash",
+            gemini_model=os.environ.get("GEMINI_MODEL", "gemini-3.5-flash").strip()
+            or "gemini-3.5-flash",
         )
 
 
