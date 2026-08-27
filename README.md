@@ -43,3 +43,9 @@ python -m src.main
 - `src/main.py`: 実行フローとエラーハンドリング
 
 新しいサイトは `BaseFetcher` の実装と、`IssueService` の fetcher 登録を追加して対応します。
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
